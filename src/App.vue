@@ -2,10 +2,11 @@
 import { onMounted } from "vue";
 
 import { db } from "../firebaseInit";
-import { query, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { query, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 onMounted(async () => {
   // await writeData();
+  await readSingleData("ZzojG7LJF83fjFRFJ9ra");
   await readData();
   // await updateData("wfOasESaGH7TlJagSm6B", "Updated Title!");
   await deleteData("wfOasESaGH7TlJagSm6B");
@@ -18,6 +19,20 @@ const readData = async () => {
     querySnapshot.forEach((doc) => {
       console.log(doc.id, doc.data());
     });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const readSingleData = async (id) => {
+  const docRef = doc(db, "questions", id);
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log(docSnap.data());
+    } else {
+      console.log("No such document!");
+    }
   } catch (e) {
     console.error(e);
   }
