@@ -3,6 +3,22 @@ import { onMounted } from "vue";
 
 import { db } from "../firebaseInit";
 import { query, collection, getDocs } from "firebase/firestore";
+
+onMounted(async () => {
+  await readData();
+});
+
+const readData = async () => {
+  const ref = query(collection(db, "questions"));
+  try {
+    const querySnapshot = await getDocs(ref);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, doc.data());
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
 </script>
 
 <template>
