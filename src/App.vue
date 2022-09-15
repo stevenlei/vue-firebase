@@ -2,17 +2,18 @@
 import { onMounted } from "vue";
 
 import { db } from "../firebaseInit";
-import { query, collection, getDocs, addDoc } from "firebase/firestore";
+import { query, collection, getDocs, addDoc, doc, updateDoc } from "firebase/firestore";
 
 onMounted(async () => {
-  await writeData();
+  // await writeData();
   await readData();
+  await updateData("wfOasESaGH7TlJagSm6B", "Updated Title!");
 });
 
 const readData = async () => {
-  const ref = query(collection(db, "questions"));
+  const docRef = query(collection(db, "questions"));
   try {
-    const querySnapshot = await getDocs(ref);
+    const querySnapshot = await getDocs(docRef);
     querySnapshot.forEach((doc) => {
       console.log(doc.id, doc.data());
     });
@@ -32,6 +33,18 @@ const writeData = async () => {
     ],
   });
   console.log("Document written with ID: ", docRef.id);
+};
+
+const updateData = async (id, title) => {
+  const docRef = doc(db, "questions", id);
+  try {
+    await updateDoc(docRef, {
+      question: title,
+    });
+    console.log("Document successfully updated!");
+  } catch (e) {
+    console.error("Error updating document: ", e);
+  }
 };
 </script>
 
