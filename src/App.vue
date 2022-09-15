@@ -2,12 +2,13 @@
 import { onMounted } from "vue";
 
 import { db } from "../firebaseInit";
-import { query, collection, getDocs, addDoc, doc, updateDoc } from "firebase/firestore";
+import { query, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 onMounted(async () => {
   // await writeData();
   await readData();
-  await updateData("wfOasESaGH7TlJagSm6B", "Updated Title!");
+  // await updateData("wfOasESaGH7TlJagSm6B", "Updated Title!");
+  await deleteData("wfOasESaGH7TlJagSm6B");
 });
 
 const readData = async () => {
@@ -44,6 +45,16 @@ const updateData = async (id, title) => {
     console.log("Document successfully updated!");
   } catch (e) {
     console.error("Error updating document: ", e);
+  }
+};
+
+const deleteData = async (id) => {
+  const docRef = doc(db, "questions", id);
+  try {
+    await deleteDoc(docRef);
+    console.log("Document successfully deleted!");
+  } catch (e) {
+    console.error("Error removing document: ", e);
   }
 };
 </script>
